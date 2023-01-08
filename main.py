@@ -109,3 +109,77 @@ class Agent(Affichable):
         i = random.randint(0,Map.taille - 1)
         j = random.randint(0,Map.taille - 1)
         self.tuile = Tuile(i,j)
+         ##  Méthode qui attributs les id
+    def give_id(self):
+        regex = string.ascii_letters+string.digits+string.punctuation
+        return "".join([regex[random.randint(0,len(regex)-1)] for _ in range(10)])
+
+    
+    ### Méthode qui permet a un agent d'observer N x N tuile autour d'elle et renvoit la liste de ses voisins
+    def get_voisin_tuile(self ,x ,y) -> List[Tuile]:
+        voisins = []
+        for i in range(-1,2):
+            for j in range(-1,2):
+                nx = x + i
+                ny = y + j
+                ## verifie que  les limites ne sont pas en dehors de la taille du tableau de tuile
+                if(nx >= 0 and ny >= 0 and nx < Map.taille and ny < Map.taille):
+                    voisins.append(Map.get_tuile( nx , ny ))
+        return voisins
+    
+        
+        
+    ### ajouter une tuile dans une liste de déplacement valide fait par un agent
+    def get_voisin_valid(self) -> List[Tuile]:
+        x = self.tuile.x
+        y = self.tuile.y
+        voisins_valides = []
+        # récupère les coordonnées d'une tuile
+        voisins = self.get_voisin_tuile(x , y)
+        for voisin in voisins:
+            #
+            if not voisin.isnot_empty():
+                #if self.event(voisin):
+                    
+                    voisins_valides.append(voisin)
+                #
+        return voisins_valides
+  
+    ### Méthode qui renvoit la tuile dans laquelle l'agent va se déplacer(
+    def next_move(self) -> Tuile:
+        voisin_valide = self.get_voisin_valid()
+        #voisin_valide = self.get_voisin_isFood()
+        index = random.randint(0 ,len(voisin_valide)-1)
+        voisin_valide[index]
+        return voisin_valide[index]
+    
+    ###  Déplacer un agent vers une autre tuile
+    def deplacer(self) -> None:
+        """
+        on récupere le prochain movement
+        et on vide la tuile précédente en affectant à la nouvelle tuile suivante
+        le prochain déplacement et on recupere les coordonnées de cette tuile
+        de telle sorte que l'objet connaisse sur quelle tuile il est placer et vise versa
+        """
+        next_tile = self.next_move()
+        #next_tile.envent()
+        self.tuile.empty_tile()
+        self.tuile = next_tile
+        next_tile.set_value(self)
+
+
+    
+  
+    
+class Isinstance:
+    def __init__(self):
+        self.cat = Chat()
+        self.mouse = Souris()
+                    
+#classe fille heritant de la super classe
+class Chat(Agent):
+    def __init__(self) -> None:
+        super().__init__('😾')
+        # self.valeur_affichage='\U0001F408'
+    """
+    

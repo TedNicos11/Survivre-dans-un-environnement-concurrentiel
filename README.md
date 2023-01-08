@@ -10,3 +10,11 @@ It is the game of life in which two types of entities are considered: the mouse 
 - Two entities of the same sex must not meet in the same tile - Each entity can do several actions: move, eat, breed. 
 - Each entity can observe NxN tiles around it - If an entity leaves the map, it will die
 
+
+# Objective:
+The main objective of the overall exercise is to enable students to understand how to use OOP
+techniques to develop software. On the other hand, they will learn how to implement software using object-oriented programming techniques.
+object-oriented programming techniques. Thus, in a first step, the students will collect data on some of their daily activities. Later, they will use this data to design and develop an application.
+
+# Installation & Launching 
+Run the project using the command on (windows / linux): python3 main.py
