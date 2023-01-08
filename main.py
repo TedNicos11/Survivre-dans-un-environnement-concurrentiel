@@ -183,3 +183,243 @@ class Chat(Agent):
         # self.valeur_affichage='\U0001F408'
     """
     
+  def eat_mouse(self):
+        x = self.tuile.x
+        y = self.tuile.y
+        voisins = self.get_voisin_tuile(x , y)
+        for voisin in voisins:
+            if voisin.is_cat():
+                if voisin.is_mouse:
+                    voisin.set_eat()
+        return voisin"""
+    """  
+    def eat_mouse(self):
+        Isins =Isinstance()
+        for i in range(Map.taille):
+            for j in range(Map.taille):
+                self.tuile = Tuile(i,j)
+                if Isins.mouse.tuile.i == Isins.cat.tuile.i and Isins.mouse.tuile.j == Isins.cat.tuile.j :
+                    del mouse.valeur_affichage
+        return Isins.cat"""
+    
+
+    def eat_mouse(self):
+        Isins =Isinstance()
+        x =random.randint(0 ,Map.taille -1)
+        y =random.randint(0 ,Map.taille -1)
+        voisins = self.get_voisin_tuile(x , y)
+        for voisin in voisins:
+            if voisin.is_mouse() and voisin.is_cat():
+                if not voisin.isnot_empty():
+                    if Isins.mouse.tuile.i == Isins.cat.tuile.i  and Isins.mouse.tuile.j == Isins.cat.tuile.j:
+                        del mouse.valeur_affichage
+                         
+            
+        
+
+class Souris(Agent):
+    def __init__(self) -> None:
+        super().__init__(None)
+        self.valeur_affichage='🐭'
+        #self.valeur_affichage='S'
+    
+        
+class Food(Affichable):
+    def __init__(self) -> None:
+        super().__init__('🃏')
+        #self.valeur_affichage='\U0001F33D'
+        
+class Map:
+    """definition de la grille de taille ['taille']"""
+    taille = 0
+    Grille = []
+    def __init__(self,taille) -> None:
+        Map.taille = taille
+        for i in range(taille):
+            Map.Grille.append([])
+            for j in range(taille):
+                tuile = Tuile(i,j)
+                Map.Grille[i].append(tuile)
+        # self.Grille = [[ Tuile() ]*(self.taille)  for i in range(self.taille)] ### une Map est une matrice de Tuile
+        self.draw_walls()
+
+    ### Méthode pour ajouter un affichable à une position aléatoire sur la map
+    def add_affichable_on_map(self, agent) -> Affichable:
+        while True:
+            x=random.randint(0,self.taille-1)
+            y=random.randint(0,self.taille-1)
+            tuile = self.get_tuile(x,y)
+            if tuile.is_empty():
+                tuile.set_value(agent)
+                agent.set_tuile(tuile)
+                break
+            elif not tuile.isnot_empty() and tuile.is_cat()== tuile.is_mouse():
+                #tuile.set_value()
+                agent.set_tuile(tuile)
+                break
+            elif not tuile.isnot_empty() and tuile.is_food()== tuile.is_mouse():
+                self.add_food_on_map()
+            
+    
+
+    def add_cat_on_map(self) -> Chat:
+        chat = Chat()
+        self.add_affichable_on_map(chat)
+        chat.eat_mouse()
+        return chat
+
+    def add_mouse_on_map(self) -> Souris:
+        souris = Souris()
+        self.add_affichable_on_map(souris)
+        return souris
+
+    def add_food_on_map(self) -> Food:
+        nourriture = Food()
+        self.add_affichable_on_map(nourriture)
+        return nourriture
+
+
+    ### Méthode pour récupérer une tuile à une position x, y
+    @classmethod
+    def get_tuile(cls, x, y) -> Tuile:
+        return cls.Grille[x][y]
+    
+    @classmethod
+    def efface_ecran(cls):
+         
+        if sys.platform.startswith("win"):
+           #if os is windows
+           os.system("cls")
+        else:
+            #if os is linux
+            os.system("clear")
+             
+            
+    def draw_walls(self):
+        #construction des cellule mur sur le map
+        x, y = 0, self.taille // 2
+        for _ in range(y, self.taille):
+            tuile = self.get_tuile(x,_)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+            
+        x, y = (self.taille // 3) - 2, 1
+        for _ in range(y, self.taille - 3):
+            tuile = self.get_tuile(x,_)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y = (self.taille // 3) - 1, self.taille // 2
+        for _ in range(x, y+2):
+            tuile = self.get_tuile(_,y)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y = self.taille // 2, (self.taille // 3) - 1
+        for _ in range(x, y+8):
+            tuile = self.get_tuile(_,y)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x ,y = (self.taille-4) ,1
+        for _ in range(y,self.taille-7):
+            tuile = self.get_tuile(x,_)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y = (self.taille-1),0
+        for _ in range(y,self.taille//2):
+            tuile = self.get_tuile(x,_)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y= (self.taille//2)+3 ,self.taille -3
+        for _ in range(x,y):
+            tuile = self.get_tuile(_,y)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y = 0,0
+        for _ in range(y,y+2):
+            tuile = self.get_tuile(x,_)
+            mur = CelluleMur(tuile)
+            tuile.set_value(mur)
+
+        x , y = 1,0
+        for _ in range(self.taille):
+            if _ == 0:
+               tuile = self.get_tuile(x,_)
+               mur = CelluleMur(tuile)
+               tuile.set_value(mur)
+            elif _ == 14:
+                 tuile = self.get_tuile(x,_)
+                 mur = CelluleMur(tuile)
+                 tuile.set_value(mur)
+        x , y = self.taille-1 , 0
+        for _ in range(self.taille):
+            if _ == 14 or _==13:
+               tuile = self.get_tuile(x,_)
+               mur = CelluleMur(tuile)
+               tuile.set_value(mur)
+        x , y = self.taille-2 ,0
+        for _ in range(y,self.taille):
+            if _ == 0 or _ == self.taille-1:
+               tuile = self.get_tuile(x,_)
+               mur = CelluleMur(tuile)
+               tuile.set_value(mur)
+
+    def console_display(self):
+        for row in self.Grille:
+            line = ""
+            for tile in row:
+                line = line + tile.get_icon()
+            print(f"{line}")
+        
+        #print()
+
+
+        
+_map = Map(15)
+
+mouse = _map.add_mouse_on_map()
+cat = _map.add_cat_on_map()
+mouse1 = _map.add_mouse_on_map()
+cat1 = _map.add_cat_on_map()
+mouse2 = _map.add_mouse_on_map()
+cat2 = _map.add_cat_on_map()
+mouse3 = _map.add_mouse_on_map()
+mouse4 = _map.add_mouse_on_map()
+mouse4 = _map.add_mouse_on_map()
+food=_map.add_food_on_map()
+food1=_map.add_food_on_map()
+food2=_map.add_food_on_map()
+food3=_map.add_food_on_map()
+food4=_map.add_food_on_map()
+food5=_map.add_food_on_map()
+food6=_map.add_food_on_map()
+food7=_map.add_food_on_map()
+food8=_map.add_food_on_map()
+food9=_map.add_food_on_map()
+food10=_map.add_food_on_map()
+
+
+while True :
+    cat.deplacer()
+    cat.eat_mouse()
+    cat1.deplacer()
+    cat1.eat_mouse()
+    cat2.deplacer()
+    cat2.eat_mouse()
+    mouse.deplacer()
+    mouse1.deplacer()
+    mouse2.deplacer()
+    mouse3.deplacer()
+    mouse4.deplacer()
+    cat.eat_mouse()
+    _map.efface_ecran()
+    _map.console_display()
+
+
+
+    time.sleep(1)
+ 
